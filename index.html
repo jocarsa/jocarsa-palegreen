@@ -9,19 +9,22 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
-  <h1>Demo de Controles: Firma y Coordenadas Geográficas</h1>
+  <h1>Demo de Controles: Firma, Coordenadas y Color CSS3</h1>
   <form action="#" method="post">
     <fieldset>
       <legend>Campo de Firma</legend>
       <label for="firma">Firma:</label>
-      <!-- Se transformará este input en un campo interactivo de firma -->
       <input type="text" id="firma" name="firma" class="jocarsa-palegreen-signature">
     </fieldset>
     <fieldset>
       <legend>Campo de Coordenadas Geográficas</legend>
       <label for="coords">Coordenadas:</label>
-      <!-- Se transformará este input en un selector de coordenadas -->
       <input type="text" id="coords" name="coords" class="jocarsa-palegreen-geocoords">
+    </fieldset>
+    <fieldset>
+      <legend>Campo de Color con Paleta Personalizada</legend>
+      <label for="color">Color:</label>
+      <input type="text" id="color" name="color" class="jocarsa-palegreen-css3colors">
     </fieldset>
     <button type="submit">Enviar</button>
   </form>

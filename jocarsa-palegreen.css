@@ -60,4 +60,48 @@
   font-weight: bold;
   cursor: pointer;
 }
+/* ===== Campo de Color con Paleta Personalizada ===== */
+.jocarsa-palegreen-css3colors-container {
+  position: relative;
+  margin: 10px 0;
+}
+
+.jocarsa-palegreen-css3colors-display {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  user-select: none;
+}
+
+.jocarsa-palegreen-css3colors-palette {
+  position: absolute;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 250px;
+  top: 100%;
+  left: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.jocarsa-palegreen-css3colors-item {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.jocarsa-palegreen-css3colors-item:hover {
+  background: #eee;
+}
+
+.jocarsa-palegreen-css3colors-item .color-swatch {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 1px solid #000;
+}
 
