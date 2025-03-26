@@ -35,7 +35,7 @@
   <!-- Se carga la librería Leaflet -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    // Inicializamos el mapa centrado en coordenadas [0, 0] con zoom 2
+    // Inicializamos el mapa centrado en [0, 0] con zoom 2
     var map = L.map('map').setView([0, 0], 2);
 
     // Añadimos la capa de OpenStreetMap
@@ -55,7 +55,6 @@
       } else {
         marker = L.marker(e.latlng).addTo(map);
       }
-      // Muestra el botón para confirmar la selección
       confirmButton.style.display = 'block';
     });
 

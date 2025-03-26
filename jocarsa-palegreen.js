@@ -1,24 +1,20 @@
 (function() {
-  // Esperamos a que el DOM se cargue completamente
   document.addEventListener('DOMContentLoaded', function() {
-    // Seleccionamos todos los inputs con la clase 'jocarsa-palegreen-signature'
-    var inputs = document.querySelectorAll('input.jocarsa-palegreen-signature');
-    inputs.forEach(function(originalInput) {
-      // Creamos el contenedor
+
+    /* ===== Campo de Firma ===== */
+    var signatureInputs = document.querySelectorAll('input.jocarsa-palegreen-signature');
+    signatureInputs.forEach(function(originalInput) {
+      // Crear contenedor y elementos
       var container = document.createElement('div');
       container.className = 'jocarsa-palegreen-signature-container';
 
-      // Creamos el canvas para la firma
       var canvas = document.createElement('canvas');
       canvas.className = 'jocarsa-palegreen-signature-canvas';
-      // Dimensiones por defecto (se pueden ajustar o parametrizar)
       canvas.width = 300;
       canvas.height = 150;
 
-      // Creamos un input oculto para almacenar la firma en base64
       var hiddenInput = document.createElement('input');
       hiddenInput.type = 'hidden';
-      // Transferimos algunos atributos del input original (por ejemplo, name e id)
       if(originalInput.hasAttribute('name')) {
         hiddenInput.name = originalInput.getAttribute('name');
       }
@@ -26,20 +22,13 @@
         hiddenInput.id = originalInput.getAttribute('id');
       }
 
-      // Agregamos canvas e input oculto al contenedor
       container.appendChild(canvas);
       container.appendChild(hiddenInput);
-
-      // Reemplazamos el input original por el contenedor
       originalInput.parentNode.replaceChild(container, originalInput);
 
-      // Configuración del canvas para capturar la firma
       var ctx = canvas.getContext('2d');
-      var isDrawing = false;
-      var lastX = 0;
-      var lastY = 0;
+      var isDrawing = false, lastX = 0, lastY = 0;
 
-      // Función para iniciar el trazo
       function startDrawing(e) {
         isDrawing = true;
         var rect = canvas.getBoundingClientRect();
@@ -52,8 +41,6 @@
         }
         e.preventDefault();
       }
-
-      // Función para trazar según el movimiento
       function draw(e) {
         if(!isDrawing) return;
         var rect = canvas.getBoundingClientRect();
@@ -65,7 +52,6 @@
           currentX = e.clientX - rect.left;
           currentY = e.clientY - rect.top;
         }
-        // Dibujamos una línea desde el último punto hasta el actual
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(currentX, currentY);
@@ -73,32 +59,101 @@
         ctx.lineWidth = 2;
         ctx.stroke();
         ctx.closePath();
-        // Actualizamos las coordenadas
         lastX = currentX;
         lastY = currentY;
-        // Actualizamos el input oculto con el contenido del canvas en base64
         hiddenInput.value = canvas.toDataURL('image/png');
         e.preventDefault();
       }
-
-      // Función para finalizar el trazo
       function stopDrawing(e) {
         isDrawing = false;
         e.preventDefault();
       }
-
-      // Eventos para dispositivos con mouse
       canvas.addEventListener('mousedown', startDrawing);
       canvas.addEventListener('mousemove', draw);
       canvas.addEventListener('mouseup', stopDrawing);
       canvas.addEventListener('mouseout', stopDrawing);
-
-      // Eventos para dispositivos táctiles
       canvas.addEventListener('touchstart', startDrawing);
       canvas.addEventListener('touchmove', draw);
       canvas.addEventListener('touchend', stopDrawing);
       canvas.addEventListener('touchcancel', stopDrawing);
     });
+
+    /* ===== Campo de Coordenadas Geográficas ===== */
+    // Creamos un modal global para el selector de coordenadas
+    var geoModal = document.createElement('div');
+    geoModal.className = 'jocarsa-palegreen-modal';
+    geoModal.style.display = 'none';
+
+    var modalContent = document.createElement('div');
+    modalContent.className = 'jocarsa-palegreen-modal-content';
+
+    var closeButton = document.createElement('span');
+    closeButton.className = 'jocarsa-palegreen-modal-close';
+    closeButton.innerHTML = '&times;';
+    modalContent.appendChild(closeButton);
+
+    var iframe = document.createElement('iframe');
+    iframe.className = 'jocarsa-palegreen-map-iframe';
+    iframe.src = 'map-selector.html';
+    iframe.style.width = '100%';
+    iframe.style.height = '500px';
+    modalContent.appendChild(iframe);
+
+    geoModal.appendChild(modalContent);
+    document.body.appendChild(geoModal);
+
+    var activeGeoHiddenInput = null, activeGeoDisplay = null;
+
+    var geoInputs = document.querySelectorAll('input.jocarsa-palegreen-geocoords');
+    geoInputs.forEach(function(originalInput) {
+      // Crear contenedor y elementos
+      var container = document.createElement('div');
+      container.className = 'jocarsa-palegreen-geocoords-container';
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.innerText = 'Seleccionar Coordenadas';
+
+      var display = document.createElement('span');
+      display.className = 'jocarsa-palegreen-geocoords-display';
+      display.innerText = 'Ninguna coordenada seleccionada';
+
+      var hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      if(originalInput.hasAttribute('name')) {
+        hiddenInput.name = originalInput.getAttribute('name');
+      }
+      if(originalInput.hasAttribute('id')) {
+        hiddenInput.id = originalInput.getAttribute('id');
+      }
+
+      container.appendChild(button);
+      container.appendChild(display);
+      container.appendChild(hiddenInput);
+      originalInput.parentNode.replaceChild(container, originalInput);
+
+      button.addEventListener('click', function() {
+        activeGeoHiddenInput = hiddenInput;
+        activeGeoDisplay = display;
+        geoModal.style.display = 'block';
+      });
+    });
+
+    closeButton.addEventListener('click', function() {
+      geoModal.style.display = 'none';
+    });
+
+    // Se espera el mensaje desde map-selector.html con las coordenadas
+    window.addEventListener('message', function(event) {
+      if(event.data && event.data.lat && event.data.lng) {
+        if(activeGeoDisplay && activeGeoHiddenInput) {
+          activeGeoDisplay.innerText = 'Lat: ' + event.data.lat + ', Lng: ' + event.data.lng;
+          activeGeoHiddenInput.value = event.data.lat + ',' + event.data.lng;
+        }
+        geoModal.style.display = 'none';
+      }
+    });
+
   });
 })();
 

@@ -1,3 +1,4 @@
+/* ===== Campo de Firma ===== */
 /* Contenedor del campo de firma */
 .jocarsa-palegreen-signature-container {
   border: 1px solid #ccc;
@@ -14,5 +15,49 @@
 /* Se oculta el input de forma visual */
 .jocarsa-palegreen-signature-container input[type="hidden"] {
   display: none;
+}
+
+/* ===== Campo de Coordenadas Geográficas ===== */
+/* Contenedor del campo de coordenadas */
+.jocarsa-palegreen-geocoords-container {
+  margin: 10px 0;
+}
+
+/* Visualización de las coordenadas */
+.jocarsa-palegreen-geocoords-display {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* Estilos para la ventana modal */
+.jocarsa-palegreen-modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none; /* Se muestra al activarse */
+}
+
+.jocarsa-palegreen-modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+.jocarsa-palegreen-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
 

@@ -3,20 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo de Campo de Firma - jocarsa-palegreen</title>
- 
+  <title>Demo de Controles - jocarsa-palegreen</title>
+  <!-- Se incluyen los estilos de la librería y Leaflet -->
+  <link rel="stylesheet" href="jocarsa-palegreen.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
-  <h1>Demo de Campo de Firma con jocarsa-palegreen</h1>
+  <h1>Demo de Controles: Firma y Coordenadas Geográficas</h1>
   <form action="#" method="post">
-    <label for="firma">Firma:</label>
-    <!-- Al usar la clase se transforma en el campo interactivo -->
-    <input type="text" id="firma" name="firma" class="jocarsa-palegreen-signature">
+    <fieldset>
+      <legend>Campo de Firma</legend>
+      <label for="firma">Firma:</label>
+      <!-- Se transformará este input en un campo interactivo de firma -->
+      <input type="text" id="firma" name="firma" class="jocarsa-palegreen-signature">
+    </fieldset>
+    <fieldset>
+      <legend>Campo de Coordenadas Geográficas</legend>
+      <label for="coords">Coordenadas:</label>
+      <!-- Se transformará este input en un selector de coordenadas -->
+      <input type="text" id="coords" name="coords" class="jocarsa-palegreen-geocoords">
+    </fieldset>
     <button type="submit">Enviar</button>
   </form>
-	<link rel="stylesheet" href="jocarsa-palegreen.css">
-	<script src="jocarsa-palegreen.js"></script>
   
+  <!-- Se incluyen los scripts de la librería y Leaflet -->
+  <script src="jocarsa-palegreen.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 </html>
 
