@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo de Coordenadas Geográficas con OpenStreetMap - jocarsa-palegreen</title>
+  <style>
+    /* Estilos para el campo de coordenadas y la ventana modal */
+    .jocarsa-palegreen-geocoords-container {
+      margin: 10px 0;
+    }
+    .jocarsa-palegreen-geocoords-display {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    .jocarsa-palegreen-modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .jocarsa-palegreen-modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      position: relative;
+    }
+    .jocarsa-palegreen-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Demo de Campo de Coordenadas Geográficas con OpenStreetMap</h1>
+  <form action="#" method="post">
+    <label for="coords">Coordenadas:</label>
+    <!-- Al aplicar la clase, este input se transforma en el selector de coordenadas -->
+    <input type="text" id="coords" name="coords" class="jocarsa-palegreen-geocoords">
+    <button type="submit">Enviar</button>
+  </form>
+
+  <!-- JavaScript para transformar el input en un selector de coordenadas -->
+  <script>
+    (function() {
+      document.addEventListener('DOMContentLoaded', function() {
+        var geoInputs = document.querySelectorAll('input.jocarsa-palegreen-geocoords');
+        geoInputs.forEach(function(originalInput) {
+          var container = document.createElement('div');
+          container.className = 'jocarsa-palegreen-geocoords-container';
+
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.innerText = 'Seleccionar Coordenadas';
+
+          var display = document.createElement('span');
+          display.className = 'jocarsa-palegreen-geocoords-display';
+          display.innerText = 'Ninguna coordenada seleccionada';
+
+          var hiddenInput = document.createElement('input');
+          hiddenInput.type = 'hidden';
+          if (originalInput.hasAttribute('name')) {
+            hiddenInput.name = originalInput.getAttribute('name');
+          }
+          if (originalInput.hasAttribute('id')) {
+            hiddenInput.id = originalInput.getAttribute('id');
+          }
+
+          container.appendChild(button);
+          container.appendChild(display);
+          container.appendChild(hiddenInput);
+
+          originalInput.parentNode.replaceChild(container, originalInput);
+
+          var modal = document.createElement('div');
+          modal.className = 'jocarsa-palegreen-modal';
+          modal.style.display = 'none';
+
+          var modalContent = document.createElement('div');
+          modalContent.className = 'jocarsa-palegreen-modal-content';
+
+          var closeButton = document.createElement('span');
+          closeButton.className = 'jocarsa-palegreen-modal-close';
+          closeButton.innerHTML = '&times;';
+          modalContent.appendChild(closeButton);
+
+          var iframe = document.createElement('iframe');
+          iframe.className = 'jocarsa-palegreen-map-iframe';
+          // Cargamos el selector de mapa que utiliza OpenStreetMap y Leaflet
+          iframe.src = 'map-selector.html';
+          iframe.style.width = '100%';
+          iframe.style.height = '500px';
+          modalContent.appendChild(iframe);
+
+          modal.appendChild(modalContent);
+          document.body.appendChild(modal);
+
+          button.addEventListener('click', function() {
+            modal.style.display = 'block';
+          });
+
+          closeButton.addEventListener('click', function() {
+            modal.style.display = 'none';
+          });
+
+          window.addEventListener('message', function(event) {
+            // Se pueden validar event.origin para mayor seguridad
+            if (event.data && event.data.lat && event.data.lng) {
+              display.innerText = 'Lat: ' + event.data.lat + ', Lng: ' + event.data.lng;
+              hiddenInput.value = event.data.lat + ',' + event.data.lng;
+              modal.style.display = 'none';
+            }
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
+

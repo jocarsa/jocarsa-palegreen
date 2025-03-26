@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selector de Coordenadas con OpenStreetMap</title>
+  <!-- Se carga la hoja de estilos de Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    #confirmButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      padding: 8px 12px;
+      background: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <button id="confirmButton">Confirmar Coordenadas</button>
+
+  <!-- Se carga la librería Leaflet -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Inicializamos el mapa centrado en coordenadas [0, 0] con zoom 2
+    var map = L.map('map').setView([0, 0], 2);
+
+    // Añadimos la capa de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var marker = null;
+    var selectedCoords = null;
+    var confirmButton = document.getElementById('confirmButton');
+
+    // Al hacer clic en el mapa se coloca o mueve el marcador
+    map.on('click', function(e) {
+      selectedCoords = e.latlng;
+      if (marker) {
+        marker.setLatLng(e.latlng);
+      } else {
+        marker = L.marker(e.latlng).addTo(map);
+      }
+      // Muestra el botón para confirmar la selección
+      confirmButton.style.display = 'block';
+    });
+
+    // Al pulsar el botón se envían las coordenadas al documento padre
+    confirmButton.addEventListener('click', function() {
+      if (selectedCoords) {
+        parent.postMessage({lat: selectedCoords.lat.toFixed(6), lng: selectedCoords.lng.toFixed(6)}, '*');
+      }
+    });
+  </script>
+</body>
+</html>
+

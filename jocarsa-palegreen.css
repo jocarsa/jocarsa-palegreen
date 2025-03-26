@@ -1,0 +1,18 @@
+/* Contenedor del campo de firma */
+.jocarsa-palegreen-signature-container {
+  border: 1px solid #ccc;
+  display: inline-block;
+  position: relative;
+}
+
+/* Estilos para el canvas de firma */
+.jocarsa-palegreen-signature-canvas {
+  display: block;
+  background-color: #fff;
+}
+
+/* Se oculta el input de forma visual */
+.jocarsa-palegreen-signature-container input[type="hidden"] {
+  display: none;
+}
+
